@@ -23,16 +23,11 @@ const PanoramaViewer = () => {
 
     // Create sphere geometry
     const geometry = new THREE.SphereGeometry(500, 60, 40);
-    geometry.scale(-1, 1, 1);
+    geometry.scale(-1, 1, 1); // Invert sphere
 
-    // Load the texture
+    // Load texture
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load(
-      "/360deg-image.jpg", // Corrected path
-      () => console.log("Texture loaded successfully"), // Success callback
-      undefined,
-      (err) => console.error("Error loading texture:", err) // Error callback
-    );
+    const texture = textureLoader.load("/360deg-image.jpg");
     const material = new THREE.MeshBasicMaterial({ map: texture });
 
     const sphere = new THREE.Mesh(geometry, material);
@@ -43,7 +38,10 @@ const PanoramaViewer = () => {
 
     // Add OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableZoom = false;
+    controls.rotateSpeed = -1.0; // Reverse rotation direction
+    controls.enableDamping = true; // Smooth damping
+    controls.dampingFactor = 0.05; // Damping intensity
+    controls.enableZoom = false; // Disable zoom for better experience
 
     // Animation loop
     const animate = () => {
